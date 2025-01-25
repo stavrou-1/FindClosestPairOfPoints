@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Using Include="System.Console" static="true"/>
+    <Using Include="System.Console" static="true" />
   </ItemGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+
 </Project>

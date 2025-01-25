@@ -1,19 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using FindClosest.Console.interfaces;
 
-namespace PublicProgram
+namespace FindClosest.Console
 {
-    public class Program
+    public class Point : IPoint
     {
-        public record Result(Point p1, Point p2, double Distance);
-
-        public record Point(int X, int Y)
+        private readonly int _X;
+        public int X 
         {
-            public float GetDistanceTo(Point p) => (float)Math.Sqrt(Math.Pow(X - p.X, 2) + Math.Pow(Y - p.Y, 2));
+            get { return _X;  }
+        }
+        private readonly int _Y;
+        public int Y 
+        {
+            get { return _Y; }
         }
 
-        public Result? Closest(Point[] points)
+        public Point(int X, int Y)
+        {
+            _X = X;
+            _Y = Y;
+        }
+        public float GetDistanceTo(Point p) 
+            => (float)Math.Sqrt(Math.Pow(X - p.X, y:2 ) + Math.Pow(Y - p.Y, y: 2 ));
+    }
+    public class Result
+    {
+        private readonly Point _P1;
+        public Point P1 { 
+            get { return _P1; }
+        }
+        private readonly Point _P2;
+        public Point P2 { 
+            get { return _P1; }
+        }
+        private readonly double _Distance; 
+
+        public double Distance { 
+            get { return _Distance; }
+        }
+        public Result(Point P1, Point P2, double Distance)
+        {
+            _P1 = P1;
+            _P2 = P2;
+            _Distance = Distance;
+        }
+    }
+
+    public class FindClosest
+    {
+        internal static Result Closest(Point[] points)
         {
             Result result = new(points[0], points[0], double.MaxValue);
             for (int i = 0; i < points.Length; i++)
@@ -30,7 +65,7 @@ namespace PublicProgram
             return result;
         }
 
-        public Result? FindClosestPair(Point[] points)
+        internal static Result? FindClosestPair(Point[] points)
         {
             if (points.Length <= 1) return null;
             if (points.Length <= 3) return Closest(points);
@@ -38,18 +73,21 @@ namespace PublicProgram
             int m = points.Length / 2;
             Result r = Closer(
                 FindClosestPair(points.Take(m).ToArray())!,
-                FindClosestPair(points.Skip(m).ToArray()!)
+                FindClosestPair(points.Skip(m).ToArray())!
             );
             Point[] strip = points.Where(p => Math.Abs(p.X - points[m].X) < r.Distance).ToArray();
-            return Closer(r, Closest(strip));
+            return Closer(r, Closest(strip)!);
         }
 
-        public Result Closer(Result r1, Result r2) => r1.Distance < r2.Distance ? r1 : r2;
+        internal static Result Closer(Result r1, Result r2) => r1.Distance < r2.Distance ? r1 : r2;
+    }
 
+    
+    public class Program
+    {
         public static void Main(string[] args)
         {
-            Program p = new Program();
-            List<Point> points = new List<Point>() 
+            List<Point> points = new() 
             {
                 new Point(6, 45),  //A,
                 new Point(12, 8),  //B,
@@ -68,15 +106,15 @@ namespace PublicProgram
             };
 
             points.Sort((a, b) => a.X.CompareTo(b.X));
-            Result? closestPair = p.FindClosestPair(points.ToArray());
+            Result? closestPair = FindClosest.FindClosestPair(points.ToArray());
             if (closestPair != null)
             {
                 WriteLine(
                     "Closest Pair: ({0}, {1}) and ({2}, {3}) with distance: {4:F2}",
-                    closestPair.p1.X,
-                    closestPair.p1.Y,
-                    closestPair.p2.X,
-                    closestPair.p2.Y,
+                    closestPair.P1.X,
+                    closestPair.P1.Y,
+                    closestPair.P2.X,
+                    closestPair.P2.Y,
                     closestPair.Distance);
             }
         }
