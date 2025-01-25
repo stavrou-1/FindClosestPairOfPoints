@@ -8,7 +8,7 @@ on:
     - '**.cs'
     - '**.csproj'
 env:
-  DOTNET_VERSION: '6.0.401' # .NET sdk to use
+  DOTNET_VERSION: '8.0.403' # .NET sdk to use, get from dotnet --info
 
 jobs:
   build-and-test:
