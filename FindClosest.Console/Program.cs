@@ -65,7 +65,7 @@ namespace FindClosest.Console
             return result;
         }
 
-        internal static Result? FindClosestPair(Point[] points)
+        public static Result? FindClosestPair(Point[] points)
         {
             if (points.Length <= 1) return null;
             if (points.Length <= 3) return Closest(points);
