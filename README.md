@@ -1,3 +1,3 @@
 # FindClosestPairOfPoints
 
-Find the closest pair of points on a grid
+Find the closest pair of points on a grids
